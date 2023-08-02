@@ -1,0 +1,127 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    color: var(--light-sub-text-icon, #334D6E);
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.12px;
+}
+
+.container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-evenly;
+    margin: auto;
+    width: 80%;
+    height: 350px;
+}
+
+.heatmap {
+    display: grid;
+    grid-gap: 2px;
+    align-items: start;
+}
+
+.col {
+    display: grid;
+    grid-gap: 2px;
+}
+
+.cell {
+    height: 11px;
+    width: 26px;
+    position: relative;
+}
+
+.label {
+    text-align: center;
+    height: 11px;
+    font-size: 12px;
+}
+.yAxisLabel {
+    white-space: nowrap;
+}
+
+.vertical {
+    max-width: 300px;
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.vertical .col {
+    flex-direction: column;
+}
+
+.tooltip {
+    position: absolute;
+    display: none;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1;
+    top: 50%;
+    left: 100%;
+    font-size: 18px;
+    border-radius: 4px;
+    min-width: 110px;
+}
+
+.tooltip span {
+    display: block;
+    font-size: 14px;
+}
+
+.tooltip .count {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.cell:hover .tooltip {
+    display: block;
+}
+
+.legend {
+    margin-right:30px;
+    width:180px;
+}
+.color {
+    width:36px;
+    height:10px;
+    border-radius:1.91px;
+    margin:1px
+}
+
+.legend .cel {
+    width: 100%;
+    display:flex;
+    justify-content: space-between;
+}
+.box {
+    display:flex;
+    width:200px;
+}
+
+.legend .labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    
+}
+
+.legend .label {
+    color: var(--light-sub-text-icon, #334D6E);
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.12px;
+}
+
+.legend span {
+    font-size: 16px;
+}

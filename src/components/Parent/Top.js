@@ -11,8 +11,10 @@ import { Box } from "./Box";
 import ChartPage from "../ChartPage/ChartPage";
 
 const Top = ({ selectedMenu, onSelectMenu }) => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState();
+  const publicationDate = new Date(2023, 4, 1);
+
+  const [startDate, setStartDate] = useState(publicationDate);
+  const [endDate, setEndDate] = useState(new Date());
 
   const handleDateRangeChange = (start, end) => {
     setStartDate(start);

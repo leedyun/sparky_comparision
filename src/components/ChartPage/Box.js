@@ -2,10 +2,31 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   display: grid;
-  grid-template-areas: 
-  "a b c"
-  "d e e";
+  grid-template-areas:
+    "a b c"
+    "d e e";
   gap: 36px;
+  > .country {
+    grid-area: a;
+  }
+  > .age {
+    grid-area: b;
+  }
+  > .gender {
+    grid-area: c;
+  }
+  > .lang {
+    grid-area: d;
+  }
+  > .time {
+    grid-area: e;
+  }
+  @media screen and (max-width: 900px) {
+    grid-template-areas:
+      "a b"
+      "c d"
+      "e e";
+  }
   > .country {
     grid-area: a;
   }
@@ -56,13 +77,13 @@ export const Box = styled.div`
   }
 `;
 export const Last = styled.div`
-  width: 688px;
+  width: 727px;
   height: 521px;
   flex-shrink: 0;
   border-radius: 3px;
   border: 1px solid #ebeff4;
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
   .header {
     width: 50%;
     height: 121px;

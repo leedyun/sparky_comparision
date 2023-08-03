@@ -1,40 +1,67 @@
+export const SelectedVideoData = [
+  {
+    video: "",
+    describe:
+      "AssignmentTable Tennis Rules AssignmentTable Tennis Rules AssignmentTable Tennis Rules AssignmentTable Tennis Rules AssignmentTable Tennis Rules AssignmentTable Tennis Rules Assignment",
+    participate: 265,
+    dater: "23.05.21",
+    play: 265,
+    replay: 265,
+    time: "130:56",
+  },
+];
+
+export const zeroData = [];
+
 const VideoData = [
   {
     video: "",
     describe:
       "Table Tennis Rules AssignmentTable Tennis Rules AssignmentTable Tennis Rules AssignmentTable Tennis Rules AssignmentTable Tennis Rules AssignmentTable Tennis Rules AssignmentTable Tennis Rules Assignment",
-    participate: 756,
-    date: "21.10.11",
+    participate: 356,
+    dater: "23.08.11",
+    play: 55,
+    replay: 15,
+    time: "3:26",
   },
   {
     video: "",
     describe: "Table Tennis Rules Assignment",
     participate: 756,
-    date: "21.10.11",
+    dater: "23.08.01",
+    play: 890,
+    replay: 390,
+    time: "100:26",
+  },
+  {
+    video: "",
+    describe: "Table Tennis Rules Assignment",
+    participate: 1000,
+    dater: "23.05.10",
+    play: 1000,
+    replay: 1000,
+    time: "100:26",
   },
   {
     video: "",
     describe: "Table Tennis Rules Assignment",
     participate: 756,
-    date: "21.10.11",
+    dater: "23.05.05",
+    play: 900,
+    replay: 2000,
+    time: "30:26",
   },
   {
     video: "",
     describe: "Table Tennis Rules Assignment",
     participate: 756,
-    date: "21.10.11",
+    dater: "21.10.11",
   },
   {
     video: "",
     describe: "Table Tennis Rules Assignment",
     participate: 756,
-    date: "21.10.11",
-  },
-  {
-    video: "",
-    describe: "Table Tennis Rules Assignment",
-    participate: 756,
-    date: "21.10.11",
+    dater: "21.10.11",
   },
   {
     video: "",

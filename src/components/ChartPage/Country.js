@@ -5,9 +5,17 @@ import "./Style.css";
 
 const Country = ({ startDate, endDate }) => {
   const filteredData = Data.filter((item) => {
+    if (startDate === null) {
+      startDate = new Date(2023, 5, 1);
+    }
+    if (endDate === null) {
+      endDate = new Date();
+    }
+    endDate.setHours(23, 59, 59, 999);
     const itemDate = new Date(item.Date);
     return itemDate >= startDate && itemDate <= endDate;
   });
+
   const countCountries = {};
   filteredData.forEach((item) => {
     countCountries[item.Country] = (countCountries[item.Country] || 0) + 1;

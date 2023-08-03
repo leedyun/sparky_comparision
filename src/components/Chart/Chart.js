@@ -5,16 +5,28 @@ import "./Chart.css";
 
 const Chart = ({ startDate, endDate }) => {
   const initialData = [
-    { date: new Date("2023-07-16"), value: 1 },
-    { date: new Date("2023-07-17"), value: 2 },
-    { date: new Date("2023-07-18"), value: 3 },
-    { date: new Date("2023-07-19"), value: 2 },
-    { date: new Date("2023-07-20"), value: 1 },
-    { date: new Date("2023-07-21"), value: 0 },
-    { date: new Date("2023-07-24"), value: 0 },
-    { date: new Date("2023-07-25"), value: 1 },
-    { date: new Date("2023-07-26"), value: 2 },
-    { date: new Date("2023-07-27"), value: 1 },
+    [
+      { date: new Date("2023-06-05"), value: 1 },
+      { date: new Date("2023-07-09"), value: 2 },
+      { date: new Date("2023-06-08"), value: 3 },
+      { date: new Date("2023-07-10"), value: 2 },
+    ],
+    [
+      { date: new Date("2023-07-26"), value: 1 },
+      { date: new Date("2023-05-17"), value: 3 },
+      { date: new Date("2023-06-06"), value: 1 },
+      { date: new Date("2023-05-19"), value: 2 },
+      { date: new Date("2023-06-18"), value: 3 },
+      { date: new Date("2023-05-10"), value: 2 },
+    ],
+    [
+      { date: new Date("2023-07-06"), value: 4 },
+      { date: new Date("2023-06-17"), value: 2 },
+      { date: new Date("2023-06-25"), value: 1 },
+      { date: new Date("2023-07-06"), value: 2 },
+      { date: new Date("2023-05-08"), value: 3 },
+      { date: new Date("2023-05-10"), value: 2 },
+    ],
   ];
 
   useEffect(() => {
@@ -27,7 +39,7 @@ const Chart = ({ startDate, endDate }) => {
       return map;
     };
 
-    const generateChartData = (startDate, endDate, data) => {
+    const generateChartData = (startDate, endDate, dataSeries) => {
       let formattedStartDate = startDate;
       let formattedEndDate = endDate;
 
@@ -38,22 +50,24 @@ const Chart = ({ startDate, endDate }) => {
           })
         : [formattedStartDate];
 
-      const mappedData = mapDataByDate(data);
+      const chartSeries = dataSeries.map((data, index) => {
+        const mappedData = mapDataByDate(data);
 
-      const chartData = dateRange.map((date) => {
-        const formattedDate = format(date, "yyyy.MM.dd");
-        return mappedData[formattedDate] || 0;
+        const chartData = dateRange.map((date) => {
+          const formattedDate = format(date, "yyyy.MM.dd");
+          return mappedData[formattedDate] || 0;
+        });
+
+        return {
+          name: `view ${index + 1}`,
+          data: chartData,
+        };
       });
 
       const categories = dateRange.map((date) => format(date, "yyyy.MM.dd"));
 
       return {
-        series: [
-          {
-            name: "view",
-            data: chartData,
-          },
-        ],
+        series: chartSeries,
         categories: categories,
       };
     };
@@ -88,13 +102,19 @@ const Chart = ({ startDate, endDate }) => {
             options={{
               chart: {
                 height: 300,
-                type: "area",
+                type: "line",
                 zoom: {
                   enabled: false,
                 },
                 toolbar: {
                   show: false,
                 },
+              },
+              fill: {
+                type: "solid",
+              },
+              legend: {
+                show: false,
               },
               dataLabels: {
                 enabled: false,
@@ -108,7 +128,11 @@ const Chart = ({ startDate, endDate }) => {
                   opacity: 1,
                 },
               },
-              colors: ["#5100CE"],
+              colors: [
+                "#5100CE",
+                "rgba(250, 173, 20, 1)",
+                "rgba(34, 131, 245, 1)",
+              ],
               yaxis: {
                 opposite: true,
                 forceNiceScale: true,
@@ -136,7 +160,7 @@ const Chart = ({ startDate, endDate }) => {
                 },
                 custom: function ({ series, seriesIndex, dataPointIndex, w }) {
                   const date = chartData.categories[dataPointIndex];
-                  const value = chartData.series[0].data[dataPointIndex];
+                  const value = series[seriesIndex][dataPointIndex];
                   return (
                     '<div class="arrow_box">' +
                     "<span class='date'>" +
@@ -155,7 +179,7 @@ const Chart = ({ startDate, endDate }) => {
               },
             }}
             series={chartData.series}
-            type="area"
+            type="line"
             height={215}
           />
         </>

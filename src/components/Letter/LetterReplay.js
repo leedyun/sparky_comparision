@@ -23,7 +23,7 @@ const Letter = ({ startDate, endDate }) => {
     <div>
       <LetterStyle>
         <Box>
-          지난 {selectedDays}일 동안 <span>{Data.people}명</span>이
+          공개된지 {selectedDays}일 부터 <span>{Data.people}명</span>이
           리플레이했어요
           <p className="p">
             리플레이는 같은 동영상을 2회 이상 플레이한 수예요.

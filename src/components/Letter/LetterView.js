@@ -21,7 +21,7 @@ const Letter = ({ startDate, endDate }) => {
 
   return (
     <LetterStyle>
-      지난 {selectedDays}일 동안 <span>{Data.people}명</span>이 참여했어요
+      공개된지 {selectedDays}일 부터 <span> {Data.people}명</span>이 참여했어요
     </LetterStyle>
   );
 };

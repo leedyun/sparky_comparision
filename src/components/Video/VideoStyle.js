@@ -2,6 +2,9 @@ import styled from "styled-components";
 
 export const VideoStyleContainer = styled.table`
   width: 100%;
+  .checkedBox {
+    color: rgba(182, 183, 184, 1);
+  }
   @media screen and (max-width: 760px) {
     .title {
       display: none;
@@ -49,6 +52,24 @@ export const Title = styled.tr`
   margin-top: 20px;
   display: grid;
   grid-template-columns: 70px 160px 4fr 0.8fr 1fr;
+  .select {
+    border: none;
+    color: var(--light-main-text, #090909);
+    text-align: center;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    letter-spacing: 0.14px;
+    cursor: pointer;
+    text-align: left;
+    option {
+      .hover {
+        background: #f5f6f8;
+      }
+    }
+  }
 `;
 export const VideoStyle = styled.tr`
   height: 82px;
@@ -68,7 +89,14 @@ export const VideoStyle = styled.tr`
   display: grid;
   grid-template-columns: 70px 160px 4fr 0.8fr 1fr;
 `;
-export const DataIndex = styled.td``;
+export const CheckBox = styled.td`
+  cursor: pointer;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+`;
 export const Youtube = styled.td`
   width: 148px;
 `;

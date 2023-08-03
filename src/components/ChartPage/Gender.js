@@ -3,11 +3,23 @@ import ApexCharts from "react-apexcharts";
 import { Data } from "./Data";
 
 export const Gender = ({ startDate, endDate }) => {
+  const filteredData = Data.filter((item) => {
+    if (startDate === null) {
+      startDate = new Date(2023, 5, 1);
+    }
+    if (endDate === null) {
+      endDate = new Date();
+    }
+    endDate.setHours(23, 59, 59, 999);
+    const itemDate = new Date(item.Date);
+    return itemDate >= startDate && itemDate <= endDate;
+  });
+
   const countGender = {
     Male: 0,
     Female: 0,
   };
-  Data.forEach((item) => {
+  filteredData.forEach((item) => {
     countGender[item.Gender] = (countGender[item.Gender] || 0) + 1;
   });
   const getDatesRange = () => {

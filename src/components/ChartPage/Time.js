@@ -47,7 +47,7 @@ function parseCustomDate(dateString) {
 
   return isoDateString;
 }
-function formatDayAndHour(chartData) {
+function formatDayAndHour(chartData, startDate, endDate) {
   const initialDates = {
     일: [],
     월: [],
@@ -57,9 +57,16 @@ function formatDayAndHour(chartData) {
     금: [],
     토: [],
   };
-  const totalVisits = chartData.length;
+  const filteredData = chartData.filter((dateString) => {
+    const formattedDate = parseCustomDate(dateString);
+    const date = new Date(formattedDate);
+    return date >= startDate && date <= endDate;
+  });
+
+  const totalVisits = filteredData.length;
+
   return [
-    chartData.reduce((dates, dateString) => {
+    filteredData.reduce((dates, dateString) => {
       const formattedDate = parseCustomDate(dateString);
       const date = new Date(formattedDate);
       const day = DAY_INDEXES[date.getDay()];
@@ -118,7 +125,11 @@ const HeatMap = ({
   endDate,
 }) => {
   const minMaxCount = useRef([]);
-  const [formattedData, totalVisits] = formatDayAndHour(data);
+  const [formattedData, totalVisits] = formatDayAndHour(
+    data,
+    startDate,
+    endDate
+  );
   const gridCells = xAxisLabels.reduce((days, dayLabel) => {
     const dayAndHour = yAxisLabels.reduce((hours, hourLabel) => {
       const count = formattedData[dayLabel]?.reduce((total, hour) => {
@@ -216,8 +227,20 @@ const HeatMap = ({
   );
 };
 
-export const Time = () => {
-  const dateStrings = Data.map((item) => item.Date);
+export const Time = ({ startDate, endDate }) => {
+  const filteredData = Data.filter((item) => {
+    if (startDate === null) {
+      startDate = new Date(2023, 5, 1);
+    }
+    if (endDate === null) {
+      endDate = new Date();
+    }
+    endDate.setHours(23, 59, 59, 999);
+    const itemDate = new Date(item.Date);
+    return itemDate >= startDate && itemDate <= endDate;
+  });
+
+  const dateStrings = filteredData.map((item) => item.Date);
   return (
     <div className="container">
       <HeatMap
@@ -225,6 +248,8 @@ export const Time = () => {
         data={dateStrings}
         xAxisLabels={dayLabels}
         yAxisLabels={hourLabels}
+        startDate={startDate}
+        endDate={endDate}
       />
     </div>
   );

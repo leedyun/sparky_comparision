@@ -1,20 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ApexChart from "react-apexcharts";
 import { Data } from "./Data";
 import "./Style.css";
 
 const Age = ({ startDate, endDate }) => {
   const filteredData = Data.filter((item) => {
+    if (startDate === null) {
+      startDate = new Date(2023, 5, 1);
+    }
+    if (endDate === null) {
+      endDate = new Date();
+    }
+    endDate.setHours(23, 59, 59, 999);
     const itemDate = new Date(item.Date);
     return itemDate >= startDate && itemDate <= endDate;
   });
+
   const ageRanges = ["17-", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"];
   const countAge = ageRanges.reduce((countAgeObj, ageRange) => {
     countAgeObj[ageRange] = 0;
     return countAgeObj;
   }, {});
 
-  Data.forEach((item) => {
+  filteredData.forEach((item) => {
     const age = item.Age;
     for (const ageRange of ageRanges) {
       if (ageRange === "17-" && age < 17) {
@@ -32,18 +40,24 @@ const Age = ({ startDate, endDate }) => {
     }
   });
 
-  const sortedAgeRanges = ageRanges.sort((a, b) => countAge[b] - countAge[a]);
-  const top5AgeRanges = sortedAgeRanges.slice(0, 5);
-  const dataForTop5AgeRanges = top5AgeRanges.map(
-    (ageRange) => countAge[ageRange]
-  );
+  let top5AgeRanges = [];
+  let percentages = [];
 
-  const totalParticipants = Data.length;
+  if (filteredData.length > 0) {
+    const sortedAgeRanges = ageRanges.sort((a, b) => countAge[b] - countAge[a]);
+    top5AgeRanges = sortedAgeRanges.slice(0, 5);
+    const dataForTop5AgeRanges = top5AgeRanges.map(
+      (ageRange) => countAge[ageRange]
+    );
 
-  const toPercentage = (count) =>
-    ((count / totalParticipants) * 100).toFixed(2);
+    const totalParticipants = filteredData.length;
 
-  const percentages = dataForTop5AgeRanges.map((count) => toPercentage(count));
+    const toPercentage = (count) =>
+      ((count / totalParticipants) * 100).toFixed(2);
+
+    percentages = dataForTop5AgeRanges.map((count) => toPercentage(count));
+  }
+
   const getDatesRange = () => {
     return `${formatDate(startDate)} - ${formatDate(endDate)}`;
   };

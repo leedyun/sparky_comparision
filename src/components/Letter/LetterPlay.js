@@ -23,7 +23,8 @@ const Letter = ({ startDate, endDate }) => {
     <div>
       <LetterStyle>
         <Box>
-          지난 {selectedDays}일 동안 <span>{Data.people}명</span>이 플레이했어요
+          공개된지 {selectedDays}일부터 <span>{Data.people}명</span>이
+          플레이했어요
           <p className="p">플레이는 동영상으로 게임 플레이를 한 수예요.</p>
         </Box>
       </LetterStyle>

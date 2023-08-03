@@ -109,7 +109,7 @@ const ChartPage = ({ startDate, endDate }) => {
           <div
             style={{ height: "400px", display: "flex", alignItems: "center" }}
           >
-            <Age />
+            <Age startDate={startDate} endDate={endDate} />
           </div>
         </Box>
         <Box className="gender">
@@ -120,7 +120,7 @@ const ChartPage = ({ startDate, endDate }) => {
           <div
             style={{ height: "400px", display: "flex", alignItems: "center" }}
           >
-            <Gender />
+            <Gender startDate={startDate} endDate={endDate} />
           </div>
         </Box>
         <Box className="lang">
@@ -131,7 +131,7 @@ const ChartPage = ({ startDate, endDate }) => {
           <div
             style={{ height: "400px", display: "flex", alignItems: "center" }}
           >
-            <Lang />
+            <Lang startDate={startDate} endDate={endDate} />
           </div>
         </Box>
         <Last className="time">
@@ -148,7 +148,7 @@ const ChartPage = ({ startDate, endDate }) => {
           <div
             style={{ height: "400px", display: "flex", alignItems: "center" }}
           >
-            <Time />
+            <Time startDate={startDate} endDate={endDate} />
           </div>
         </Last>
       </Container>

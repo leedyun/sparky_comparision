@@ -22,7 +22,7 @@ const Letter = ({ startDate, endDate }) => {
   return (
     <div>
       <LetterStyle>
-        지난 {selectedDays}일 동안 <span>{Data.Time}분</span> 플레이됐어요
+        공개된지 {selectedDays}일 부터 <span>{Data.Time}분</span> 플레이됐어요
       </LetterStyle>
       <LetterStyle style={{ marginTop: 20 }}>
         <Box>

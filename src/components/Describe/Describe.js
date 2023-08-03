@@ -2,13 +2,10 @@ import { Main, Sub } from "./DescribeStyle";
 
 const Describe = () => {
   return (
-    <>
-      <Main>이 기간내 조회가 많은 동영상</Main>
-      <Sub>
-        Tip. 사람들의 흥미를 이끄는 썸네일과 제목일 가능성이 높아요. 참고하여
-        다음 동영상에 적용해보세요.
-      </Sub>
-    </>
+    <div style={{ textAlign: "left" }}>
+      <Main>동영상 비교</Main>
+      <Sub>Tip. 비교를 통해 참여를 높힐 수 있는 인사이트를 얻어보세요.</Sub>
+    </div>
   );
 };
 

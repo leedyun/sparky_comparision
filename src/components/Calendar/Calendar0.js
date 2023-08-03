@@ -14,6 +14,7 @@ import {
 } from "./CalendarStyle";
 import CustomPrevArrow from "./CustomPrevArrow";
 import CustomNextArrow from "./CustomNextArrow";
+import { initOnLoad } from "apexcharts";
 
 const CustomHeader = ({ monthDate }) => {
   return (
@@ -25,18 +26,18 @@ const CustomHeader = ({ monthDate }) => {
   );
 };
 
-const Calendar0 = ({ onDateRangeChange }) => {
+const Calendar0 = ({ onDateRangeChange, isInitialLoad }) => {
+  const publicationDate = new Date(2023, 4, 1);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(null);
   const [calendarIndex, setCalendarIndex] = useState(1);
   const [monthsShown, setMonthsShown] = useState(3);
-  const publicationDate = new Date(2023, 4, 1);
 
-  useEffect(() => {
-    console.log("Start Date:", startDate);
-    console.log("End Date:", endDate);
-  }, [startDate, endDate]);
+  const formatDate = (date) => {
+    return format(date, "yyyy.MM.dd");
+  };
+
+  const [startDate, setStartDate] = useState(publicationDate);
+  const [endDate, setEndDate] = useState(new Date());
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -54,12 +55,14 @@ const Calendar0 = ({ onDateRangeChange }) => {
       window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
+
   const handleMonthChange = (date) => {
     setCalendarIndex(date.getMonth());
   };
 
   const onChange = (dates) => {
     const [start, end] = dates;
+
     setStartDate(start);
     setEndDate(end);
     onDateRangeChange(start, end);
@@ -69,13 +72,15 @@ const Calendar0 = ({ onDateRangeChange }) => {
     setShowCalendar(!showCalendar);
   };
 
-  const formatDate = (date) => {
-    return format(date, "yyyy.MM.dd");
-  };
-
   const handleRecommendedPeriodClick = (days) => {
     const start = new Date(publicationDate);
-    const end = new Date(start.getTime() + (days + 1) * 24 * 60 * 60 * 1000);
+    let end;
+
+    if (days === -1 || days === 7) {
+      end = new Date(start.getTime() + (days - 1) * 24 * 60 * 60 * 1000);
+    } else {
+      end = new Date(start.getTime() + days * 24 * 60 * 60 * 1000);
+    }
 
     setStartDate(start);
     setEndDate(end);
@@ -95,7 +100,12 @@ const Calendar0 = ({ onDateRangeChange }) => {
 
   const getDaysSincePublication = (endDate) => {
     const end = endDate || new Date();
-    const days = differenceInDays(end, publicationDate) + 1;
+    const days = differenceInDays(end, publicationDate);
+    return days > -1 ? days : 0;
+  };
+  const getDaysSince = (startDate, endDate) => {
+    const end = endDate || new Date();
+    const days = differenceInDays(end, startDate) + 1;
     return days > 0 ? days : 0;
   };
 
@@ -103,12 +113,14 @@ const Calendar0 = ({ onDateRangeChange }) => {
     <CalendarStyle className="calendarStyle">
       <DateBox className="dateBox" onClick={handleCustomSelection}>
         <div className="date">
-          {formatDate(publicationDate)}
+          {formatDate(startDate || publicationDate)}
           &nbsp;~&nbsp;{formatDate(endDate || startDate)}
           <img src="/downArrow.jpg" alt="img" className="img" />
         </div>
         <div className="past">
-          공개된지 {getDaysSincePublication(endDate)}일
+          {isInitialLoad
+            ? "공개된 이후"
+            : `공개된지 ${getDaysSince(startDate, endDate)}일`}
         </div>
       </DateBox>
       {showCalendar && (
@@ -185,7 +197,7 @@ const Calendar0 = ({ onDateRangeChange }) => {
             </button>
             <button
               className="buttonstyle"
-              onClick={() => handleRecommendedPeriodClick(-1)}
+              onClick={() => handleRecommendedPeriodClick(0)}
             >
               공개 당일
             </button>

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext, useEffect } from "react";
 import {
   Title,
   VideoStyle,
@@ -15,6 +15,7 @@ import {
 import VideoData, { SelectedVideoData, zeroData } from "./VideoData";
 import { MdCheckBoxOutlineBlank, MdCheckBox } from "react-icons/md";
 import Select from "react-select";
+import { SelectedVideosContext } from "../SelectedVideosContext";
 
 const Video = () => {
   const [showAllRows, setShowAllRows] = useState(false);
@@ -23,7 +24,9 @@ const Video = () => {
   const totalPages = Math.ceil(VideoData.length / pageSize);
   const visiblePages = 5;
   const [selectedFilter, setSelectedFilter] = useState("participate");
-  const [selectedVideoes, setSelectedVideos] = useState([]);
+  const { selectedVideos, setSelectedVideos } = useContext(
+    SelectedVideosContext
+  );
 
   const handleShowAllRows = () => {
     setShowAllRows(true);
@@ -50,12 +53,14 @@ const Video = () => {
   };
 
   const handleSelectVideo = (index) => {
+    const realIndex = page * pageSize + index;
+    const selectedVideo = VideoData[realIndex];
     setSelectedVideos((prevSelected) => {
-      if (prevSelected.includes(index)) {
-        return prevSelected.filter((i) => i != index);
+      if (prevSelected.some((video) => video === selectedVideo)) {
+        return prevSelected.filter((video) => video !== selectedVideo);
       } else {
         return prevSelected.length < 2
-          ? [...prevSelected, index]
+          ? [...prevSelected, selectedVideo]
           : prevSelected;
       }
     });
@@ -152,7 +157,7 @@ const Video = () => {
 
   return (
     <div>
-      <VideoStyleContainer responsive borderless>
+      <VideoStyleContainer responsive="true" borderless="true">
         <thead>
           <Title className="title">
             <th>동영상</th>
@@ -203,27 +208,39 @@ const Video = () => {
               <VideoStyle
                 key={index}
                 className={`videoStyle ${
-                  selectedVideoes.includes(index) ? "selected" : ""
+                  selectedVideos.includes(VideoData[page * pageSize + index])
+                    ? "selected"
+                    : ""
                 }`}
                 style={
-                  selectedVideoes.includes(index)
+                  selectedVideos.includes(VideoData[page * pageSize + index])
                     ? {
                         background:
-                          selectedColors[selectedVideoes.indexOf(index)],
+                          selectedColors[
+                            selectedVideos.indexOf(
+                              VideoData[page * pageSize + index]
+                            )
+                          ],
                       }
                     : {}
                 }
                 onClick={() => handleSelectVideo(index)}
               >
                 <CheckBox className="checkBox">
-                  {selectedVideoes.includes(index) ? (
+                  {selectedVideos.includes(
+                    VideoData[page * pageSize + index]
+                  ) ? (
                     <MdCheckBox
                       style={
-                        selectedVideoes.includes(index)
+                        selectedVideos.includes(
+                          VideoData[page * pageSize + index]
+                        )
                           ? {
                               color:
                                 checkSelectedColors[
-                                  selectedVideoes.indexOf(index)
+                                  selectedVideos.indexOf(
+                                    VideoData[page * pageSize + index]
+                                  )
                                 ],
                             }
                           : {}
@@ -233,6 +250,7 @@ const Video = () => {
                     <MdCheckBoxOutlineBlank />
                   )}
                 </CheckBox>
+
                 <Youtube className="youtube">
                   <img src="img.png" alt="img" className="image" />
                 </Youtube>

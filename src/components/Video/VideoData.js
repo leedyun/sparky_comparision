@@ -48,9 +48,9 @@ const VideoData = [
     replay: 15,
     time: "3:26",
     chParticipate: [
-      { date: new Date("2023-06-05"), value: 1 },
-      { date: new Date("2023-07-09"), value: 2 },
-      { date: new Date("2023-06-08"), value: 3 },
+      { date: new Date("2023-06-05"), value: 2 },
+      { date: new Date("2023-07-09"), value: 3 },
+      { date: new Date("2023-06-08"), value: 4 },
       { date: new Date("2023-06-10"), value: 2 },
     ],
     chPlay: [
@@ -81,10 +81,10 @@ const VideoData = [
     replay: 390,
     time: "100:26",
     chParticipate: [
-      { date: new Date("2023-06-05"), value: 1 },
+      { date: new Date("2023-06-05"), value: 3 },
       { date: new Date("2023-07-09"), value: 2 },
-      { date: new Date("2023-06-08"), value: 3 },
-      { date: new Date("2023-07-10"), value: 2 },
+      { date: new Date("2023-06-08"), value: 4 },
+      { date: new Date("2023-07-10"), value: 5 },
     ],
     chPlay: [
       { date: new Date("2023-06-05"), value: 1 },
@@ -141,11 +141,35 @@ const VideoData = [
   {
     video: "",
     describe: "Table Tennis Rules Assignment",
-    participate: 756,
+    participate: 1256,
     date: "23.05.05",
     play: 900,
     replay: 2000,
     time: "30:26",
+    chParticipate: [
+      { date: new Date("2023-06-05"), value: 2 },
+      { date: new Date("2023-07-09"), value: 3 },
+      { date: new Date("2023-06-08"), value: 4 },
+      { date: new Date("2023-07-10"), value: 3 },
+    ],
+    chPlay: [
+      { date: new Date("2023-06-05"), value: 1 },
+      { date: new Date("2023-06-06"), value: 2 },
+      { date: new Date("2023-06-17"), value: 3 },
+      { date: new Date("2023-07-18"), value: 1 },
+    ],
+    chReplay: [
+      { date: new Date("2023-05-09"), value: 2 },
+      { date: new Date("2023-06-02"), value: 2 },
+      { date: new Date("2023-06-05"), value: 2 },
+      { date: new Date("2023-07-19"), value: 3 },
+    ],
+    chTime: [
+      { date: new Date("2023-06-15"), value: 30 },
+      { date: new Date("2023-06-02"), value: 40 },
+      { date: new Date("2023-06-20"), value: 20 },
+      { date: new Date("2023-07-15"), value: 10 },
+    ],
   },
   {
     video: "",

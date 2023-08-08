@@ -168,23 +168,17 @@ const Video = () => {
           </Title>
         </thead>
         <tbody>
-          {SelectedVideoData.map((tdata, index) => (
-            <VideoStyle
-              key={0}
-              className="videoStyle"
-              style={{ background: "#EBE3F7" }}
-            >
+          {SelectedVideoData.map((adata) => (
+            <VideoStyle key={0} style={{ background: "#EBE3F7" }}>
               <CheckBox className="checkedBox">
                 <MdCheckBox />
               </CheckBox>
-              <Youtube className="youtube">
+              <Youtube>
                 <img src="img.png" alt="img" className="image" />
               </Youtube>
-              <Describe className="describe">{tdata.describe}</Describe>
-              <Participate className="participate">
-                {tdata.participate}
-              </Participate>
-              <Date className="date">{tdata.date}</Date>
+              <Describe>{adata.describe}</Describe>
+              <Participate>{adata.participate}</Participate>
+              <Date>{adata.date}</Date>
             </VideoStyle>
           ))}
           <Title className="title">

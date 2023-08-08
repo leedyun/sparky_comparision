@@ -16,30 +16,33 @@ const Chart = ({ startDate, endDate, chdata }) => {
   const [chartData, setChartData] = useState(null);
 
   useEffect(() => {
-    let dataToProcess = initialData;
+    const dataToProcess = [];
+    dataToProcess.push(initialData[0]);
 
-    if (chdata && chdata.length > 0) {
-      dataToProcess =
-        chdata.length > 4
-          ? [...initialData, [...chdata], chdata]
-          : [...initialData, chdata];
+    if (chdata && chdata.length === 4) {
+      dataToProcess.push(chdata);
+    }
+
+    if (chdata && chdata.length === 5) {
+      const secondVideoData = chdata.slice(4); // 두 번째 동영상 데이터만 추출
+      dataToProcess.push(secondVideoData);
     }
 
     const mapDataByDate = (dataSeries, startDate, endDate) => {
-      const mappedData = {};
-      dataSeries.forEach((series) => {
+      return dataSeries.map((series) => {
+        const mappedSeries = {};
         series.forEach((item) => {
           const itemDate = new Date(item.date);
           if (itemDate >= startDate && itemDate <= endDate) {
             const formattedDate = format(itemDate, "yyyy.MM.dd");
-            if (!mappedData[formattedDate]) {
-              mappedData[formattedDate] = [];
+            if (!mappedSeries[formattedDate]) {
+              mappedSeries[formattedDate] = 0;
             }
-            mappedData[formattedDate].push(item.value);
+            mappedSeries[formattedDate] += item.value;
           }
         });
+        return mappedSeries;
       });
-      return mappedData;
     };
 
     const generateChartData = (startDate, endDate, dataSeries = []) => {
@@ -49,19 +52,16 @@ const Chart = ({ startDate, endDate, chdata }) => {
         end: new Date(endDate),
       });
 
-      const chartSeries = [];
-      for (let i = 0; i < dataSeries.length; i++) {
+      const chartSeries = mappedData.map((series, i) => {
         const data = dateRange.map((date) => {
           const formattedDate = format(date, "yyyy.MM.dd");
-          return mappedData[formattedDate]
-            ? mappedData[formattedDate][i] || 0
-            : 0;
+          return series[formattedDate] || 0;
         });
-        chartSeries.push({
+        return {
           name: `view ${i + 1}`,
           data: data,
-        });
-      }
+        };
+      });
 
       const categories = dateRange.map((date) => format(date, "yyyy.MM.dd"));
 

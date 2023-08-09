@@ -5,89 +5,62 @@ import "./Chart.css";
 
 const Chart = ({ startDate, endDate, chdata }) => {
   const [initialData, setInitialData] = useState([
-    [
-      { date: new Date("2023-06-05"), value: 1 },
-      { date: new Date("2023-07-09"), value: 2 },
-      { date: new Date("2023-06-08"), value: 3 },
-      { date: new Date("2023-07-10"), value: 2 },
-    ],
+    { date: new Date("2023-06-05"), value: 1 },
+    { date: new Date("2023-07-09"), value: 2 },
+    { date: new Date("2023-06-08"), value: 3 },
+    { date: new Date("2023-07-10"), value: 2 },
   ]);
 
-  const [chartData, setChartData] = useState(null);
+  const [chartDataInitial, setChartDataInitial] = useState(null);
+  const [chartDataChdata, setChartDataChdata] = useState(null);
 
   useEffect(() => {
-    const dataToProcess = [];
-    dataToProcess.push(initialData[0]);
+    const mappedDataInitial = mapDataByDate(initialData, startDate, endDate);
+    const mappedDataChdata = mapDataByDate(chdata, startDate, endDate);
 
-    if (chdata && chdata.length === 4) {
-      dataToProcess.push(chdata);
-    }
+    setChartDataInitial({
+      series: generateDataArray(mappedDataInitial),
+      categories: generateCategories(startDate, endDate),
+    });
 
-    if (chdata && chdata.length === 5) {
-      const secondVideoData = chdata.slice(4); // 두 번째 동영상 데이터만 추출
-      dataToProcess.push(secondVideoData);
-    }
+    setChartDataChdata({
+      series: generateDataArray(mappedDataChdata),
+      categories: generateCategories(startDate, endDate),
+    });
+  }, [startDate, endDate, initialData, chdata]);
 
-    const mapDataByDate = (dataSeries, startDate, endDate) => {
-      return dataSeries.map((series) => {
-        const mappedSeries = {};
-        series.forEach((item) => {
-          const itemDate = new Date(item.date);
-          if (itemDate >= startDate && itemDate <= endDate) {
-            const formattedDate = format(itemDate, "yyyy.MM.dd");
-            if (!mappedSeries[formattedDate]) {
-              mappedSeries[formattedDate] = 0;
-            }
-            mappedSeries[formattedDate] += item.value;
-          }
-        });
-        return mappedSeries;
-      });
-    };
+  const mapDataByDate = (dataSeries, startDate, endDate) => {
+    return dataSeries.reduce((mappedSeries, item) => {
+      const itemDate = new Date(item.date);
+      if (itemDate >= startDate && itemDate <= endDate) {
+        const formattedDate = format(itemDate, "yyyy.MM.dd");
+        if (!mappedSeries[formattedDate]) {
+          mappedSeries[formattedDate] = 0;
+        }
+        mappedSeries[formattedDate] += item.value;
+      }
+      return mappedSeries;
+    }, {});
+  };
 
-    const generateChartData = (startDate, endDate, dataSeries = []) => {
-      const mappedData = mapDataByDate(dataSeries, startDate, endDate);
-      const dateRange = eachDayOfInterval({
-        start: new Date(startDate),
-        end: new Date(endDate),
-      });
+  const generateDataArray = (mappedData) => {
+    return generateCategories(startDate, endDate).map(
+      (date) => mappedData[date] || 0
+    );
+  };
 
-      const chartSeries = mappedData.map((series, i) => {
-        const data = dateRange.map((date) => {
-          const formattedDate = format(date, "yyyy.MM.dd");
-          return series[formattedDate] || 0;
-        });
-        return {
-          name: `view ${i + 1}`,
-          data: data,
-        };
-      });
-
-      const categories = dateRange.map((date) => format(date, "yyyy.MM.dd"));
-
-      return {
-        series: chartSeries,
-        categories: categories,
-      };
-    };
-
-    let interval = 1;
-    if (startDate && endDate) {
-      const daysDifference = Math.ceil(
-        (new Date(endDate).getTime() - new Date(startDate).getTime()) /
-          (1000 * 3600 * 24)
-      );
-      interval = Math.max(Math.min(Math.floor(daysDifference / 2), 6), 1);
-    }
-
-    const newData = generateChartData(startDate, endDate, dataToProcess);
-    setChartData({ ...newData, interval: interval });
-  }, [startDate, endDate, chdata, initialData]);
+  const generateCategories = (startDate, endDate) => {
+    const dateRange = eachDayOfInterval({
+      start: new Date(startDate),
+      end: new Date(endDate),
+    });
+    return dateRange.map((date) => format(date, "yyyy.MM.dd"));
+  };
 
   return (
     <div className="ChartContainer">
-      {chartData && (
-        <>
+      <div className="Chart">
+        {chartDataInitial && chartDataChdata && (
           <ReactApexChart
             options={{
               chart: {
@@ -104,7 +77,7 @@ const Chart = ({ startDate, endDate, chdata }) => {
                 type: "solid",
               },
               legend: {
-                show: false,
+                show: true,
               },
               dataLabels: {
                 enabled: false,
@@ -129,8 +102,8 @@ const Chart = ({ startDate, endDate, chdata }) => {
               },
               xaxis: {
                 type: "datetime",
-                categories: chartData.categories,
-                tickAmount: chartData.interval,
+                categories: chartDataInitial.categories,
+                tickAmount: chartDataInitial.interval,
                 labels: {
                   formatter: function (value, timestamp, index) {
                     const date = new Date(timestamp);
@@ -149,7 +122,7 @@ const Chart = ({ startDate, endDate, chdata }) => {
                   },
                 },
                 custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-                  const date = chartData.categories[dataPointIndex];
+                  const date = chartDataInitial.categories[dataPointIndex];
                   const value = series[seriesIndex][dataPointIndex];
                   return (
                     '<div class="arrow_box">' +
@@ -168,12 +141,25 @@ const Chart = ({ startDate, endDate, chdata }) => {
                 },
               },
             }}
-            series={chartData.series}
+            series={[
+              {
+                name: "Initial Data",
+                data: chartDataInitial.series,
+              },
+              {
+                name: "Chdata",
+                data: chartDataChdata.series,
+              },
+              {
+                name: "Combined Data",
+                data: generateDataArray(chartDataChdata),
+              },
+            ]}
             type="line"
             height={215}
           />
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 };

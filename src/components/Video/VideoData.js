@@ -54,10 +54,10 @@ const VideoData = [
       { date: new Date("2023-06-10"), value: 2 },
     ],
     chPlay: [
-      { date: new Date("2023-06-05"), value: 1 },
+      { date: new Date("2023-06-05"), value: 3 },
       { date: new Date("2023-06-09"), value: 2 },
-      { date: new Date("2023-06-15"), value: 3 },
-      { date: new Date("2023-07-10"), value: 1 },
+      { date: new Date("2023-06-15"), value: 1 },
+      { date: new Date("2023-07-01"), value: 1 },
     ],
     chReplay: [
       { date: new Date("2023-05-05"), value: 1 },
@@ -66,10 +66,10 @@ const VideoData = [
       { date: new Date("2023-07-10"), value: 2 },
     ],
     chTime: [
-      { date: new Date("2023-06-15"), value: 50 },
-      { date: new Date("2023-06-09"), value: 20 },
-      { date: new Date("2023-06-28"), value: 30 },
-      { date: new Date("2023-07-10"), value: 20 },
+      { date: new Date("2023-05-15"), value: 20 },
+      { date: new Date("2023-06-09"), value: 10 },
+      { date: new Date("2023-06-18"), value: 25 },
+      { date: new Date("2023-07-10"), value: 13 },
     ],
   },
   {
@@ -93,9 +93,9 @@ const VideoData = [
       { date: new Date("2023-07-10"), value: 1 },
     ],
     chReplay: [
-      { date: new Date("2023-05-05"), value: 1 },
-      { date: new Date("2023-06-09"), value: 1 },
-      { date: new Date("2023-06-08"), value: 1 },
+      { date: new Date("2023-05-25"), value: 3 },
+      { date: new Date("2023-06-19"), value: 2 },
+      { date: new Date("2023-06-15"), value: 1 },
       { date: new Date("2023-07-10"), value: 2 },
     ],
     chTime: [

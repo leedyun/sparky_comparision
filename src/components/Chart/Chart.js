@@ -67,9 +67,13 @@ const Chart = ({ startDate, endDate, chdata1, chdata2 }) => {
     if (startDate > endDate) {
       [startDate, endDate] = [endDate, startDate];
     }
+    if (!(startDate instanceof Date && endDate instanceof Date)) {
+      console.error("Invalid dates provided to generateCategories");
+      return [];
+    }
     const dateRange = eachDayOfInterval({
-      start: new Date(startDate),
-      end: new Date(endDate),
+      start: startDate,
+      end: endDate,
     });
     return dateRange.map((date) => format(date, "yyyy.MM.dd"));
   };

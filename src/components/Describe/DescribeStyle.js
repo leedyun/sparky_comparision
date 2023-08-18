@@ -29,3 +29,21 @@ export const Sub = styled.div`
     font-weight: 330;
   }
 `;
+
+export const Compare = styled.div`
+  display: flex;
+  padding: 7px 18px;
+  gap: 4px;
+  border-radius: 3px;
+  border: 1px solid #ebeff4;
+  background: var(--bg-1, #f5f6f8);
+  cursor: pointer;
+  color: var(--light-main-text, #090909);
+  text-align: center;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 0.14px;
+`;

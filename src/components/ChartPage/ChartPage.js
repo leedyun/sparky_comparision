@@ -14,7 +14,19 @@ const ChartPage = ({ startDate, endDate }) => {
   const countWeek = {};
   const countTime = {};
 
-  Data.forEach((item) => {
+  const filteredData = Data.filter((item) => {
+    if (!startDate) {
+      startDate = new Date(2023, 5, 1);
+    }
+    if (!endDate) {
+      endDate = new Date();
+    }
+    endDate.setHours(23, 59, 59, 999);
+    const itemDate = new Date(item.Date);
+    return itemDate >= startDate && itemDate <= endDate;
+  });
+
+  filteredData.forEach((item) => {
     countCountry[item.Country] = (countCountry[item.Country] || 0) + 1;
     countGender[item.Gender] = (countGender[item.Gender] || 0) + 1;
     countLanguage[item.Language] = (countLanguage[item.Language] || 0) + 1;
@@ -25,16 +37,27 @@ const ChartPage = ({ startDate, endDate }) => {
     countTime[time] = (countTime[time] || 0) + 1;
   });
 
-  const mostFrequentCountry = Object.keys(countCountry).reduce((a, b) =>
-    countCountry[a] > countCountry[b] ? a : b
-  );
-  const mostFrequentGender = Object.keys(countGender).reduce((a, b) =>
-    countGender[a] > countGender[b] ? a : b
-  );
-  const KGender = mostFrequentGender === "male" ? "남성" : "여성";
-  const mostFrequentLanguage = Object.keys(countLanguage).reduce((a, b) =>
-    countLanguage[a] > countLanguage[b] ? a : b
-  );
+  const mostFrequentCountry =
+    Object.keys(countCountry).length !== 0
+      ? Object.keys(countCountry).reduce((a, b) =>
+          countCountry[a] > countCountry[b] ? a : b
+        )
+      : "Unknown";
+
+  const mostFrequentGender =
+    Object.keys(countGender).length !== 0
+      ? Object.keys(countGender).reduce((a, b) =>
+          countGender[a] > countGender[b] ? a : b
+        )
+      : "Unknown";
+  const KGender = mostFrequentGender === "Male" ? "남성" : "여성";
+
+  const mostFrequentLanguage =
+    Object.keys(countLanguage).length !== 0
+      ? Object.keys(countLanguage).reduce((a, b) =>
+          countLanguage[a] > countLanguage[b] ? a : b
+        )
+      : "Unknown";
 
   const days = [
     "일요일",
@@ -45,24 +68,28 @@ const ChartPage = ({ startDate, endDate }) => {
     "금요일",
     "토요일",
   ];
-  const hours = Array.from({ length: 24 }, (_, i) => i);
   const mostFrequentWeek =
-    days[
-      Object.keys(countWeek).reduce((a, b) =>
-        countWeek[a] > countWeek[b] ? a : b
-      )
-    ];
-  const mostFrequentTime =
-    hours[
-      Object.keys(countTime).reduce((a, b) =>
-        countTime[a] > countTime[b] ? a : b
-      )
-    ];
+    Object.keys(countWeek).length !== 0
+      ? days[
+          Object.keys(countWeek).reduce((a, b) =>
+            countWeek[a] > countWeek[b] ? a : b
+          )
+        ]
+      : "Unknown";
+
+  const hours = Array.from({ length: 24 }, (_, i) => i);
+  const mostFrequentTimeValue =
+    Object.keys(countTime).length !== 0
+      ? Object.keys(countTime).reduce((a, b) =>
+          countTime[a] > countTime[b] ? a : b
+        )
+      : 0;
+  const mostFrequentTime = hours[mostFrequentTimeValue];
   const period = mostFrequentTime < 12 ? "Am" : "PM";
   let hour = mostFrequentTime % 12;
   if (hour === 0) hour = 12;
 
-  const ageData = Data.map((item) => item.Age);
+  const ageData = filteredData.map((item) => item.Age);
   const ageRanges = [
     { name: "17-", range: [0, 17] },
     { name: "18-24", range: [18, 24] },
@@ -80,11 +107,14 @@ const ChartPage = ({ startDate, endDate }) => {
       return count;
     }, 0)
   );
-  const mostFrequentAgeRangeIndex = ageCounts.reduce(
-    (prevIndex, currentIndex, currentIndex2) =>
-      currentIndex > ageCounts[prevIndex] ? currentIndex2 : prevIndex,
-    0
-  );
+  const mostFrequentAgeRangeIndex =
+    ageCounts.length !== 0
+      ? ageCounts.reduce(
+          (prevIndex, currentIndex, currentIndex2) =>
+            currentIndex > ageCounts[prevIndex] ? currentIndex2 : prevIndex,
+          0
+        )
+      : 0;
   const mostFrequentAgeRange = ageRanges[mostFrequentAgeRangeIndex].name;
 
   return (

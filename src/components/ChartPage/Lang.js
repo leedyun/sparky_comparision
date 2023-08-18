@@ -33,9 +33,14 @@ export const Lang = ({ startDate, endDate }) => {
     return `${year}.${month}.${day}`;
   };
   const totalLanguages = filteredData.length;
-  const mostFrequentLanguage = Object.keys(countLangs).reduce((a, b) =>
-    countLangs[a] > countLangs[b] ? a : b
-  );
+  let mostFrequentLanguage;
+  if (Object.keys(countLangs).length) {
+    mostFrequentLanguage = Object.keys(countLangs).reduce((a, b) =>
+      countLangs[a] > countLangs[b] ? a : b
+    );
+  } else {
+    mostFrequentLanguage = "Unknown";
+  }
   const sortedLangs = Object.keys(countLangs).sort(
     (a, b) => countLangs[b] - countLangs[a]
   );

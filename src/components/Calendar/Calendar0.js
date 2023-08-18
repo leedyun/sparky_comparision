@@ -61,10 +61,7 @@ const Calendar0 = ({ onDateRangeChange, isInitialLoad }) => {
   };
 
   const onChange = (dates) => {
-    let [start, end] = dates;
-    if (start && end && start > end) {
-      [start, end] = [end, start];
-    }
+    const [start, end] = dates;
 
     setStartDate(start);
     setEndDate(end);
@@ -123,7 +120,9 @@ const Calendar0 = ({ onDateRangeChange, isInitialLoad }) => {
         <div className="past">
           {isInitialLoad
             ? "공개된 이후"
-            : `공개된지 ${getDaysSince(startDate, endDate)}일`}
+            : `공개된지 ${
+                startDate > endDate ? 1 : getDaysSince(startDate, endDate)
+              }일`}
         </div>
       </DateBox>
       {showCalendar && (

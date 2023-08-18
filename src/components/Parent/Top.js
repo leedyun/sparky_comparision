@@ -17,6 +17,8 @@ const Top = ({ selectedMenu, onSelectMenu }) => {
   const [startDate, setStartDate] = useState(publicationDate);
   const [endDate, setEndDate] = useState(new Date());
   const { selectedVideos } = useContext(SelectedVideosContext);
+  const [chdata1, setChdata1] = useState(null);
+  const [chdata2, setChdata2] = useState(null);
 
   const handleDateRangeChange = (start, end) => {
     setStartDate(start);
@@ -24,11 +26,23 @@ const Top = ({ selectedMenu, onSelectMenu }) => {
   };
   useEffect(() => {
     console.log("Selected Videos:", selectedVideos);
+    console.log("chdata1:", chdata1);
     selectedVideos.forEach((video, index) => {
       console.log(`Video ${index}:`, video);
-      console.log("chdata:", chdata);
     });
   });
+  useEffect(() => {
+    if (selectedVideos.length === 0) {
+      setChdata1(null);
+      setChdata2(null);
+    } else if (selectedVideos.length === 1) {
+      setChdata1(getDataBySelectedMenu(selectedMenu, [selectedVideos[0]]));
+      setChdata2(null);
+    } else if (selectedVideos.length === 2) {
+      setChdata1(getDataBySelectedMenu(selectedMenu, [selectedVideos[0]]));
+      setChdata2(getDataBySelectedMenu(selectedMenu, [selectedVideos[1]]));
+    }
+  }, [selectedMenu, selectedVideos]);
   const getDataBySelectedMenu = (selectedMenu, selectedVideos) => {
     const dateTotals = {};
 
@@ -68,11 +82,6 @@ const Top = ({ selectedMenu, onSelectMenu }) => {
       return { date: new Date(date), value: value };
     });
   };
-  const chdata = useMemo(() => {
-    const data = getDataBySelectedMenu(selectedMenu, selectedVideos);
-    console.log("Calculated chdata:", selectedMenu, selectedVideos, data);
-    return data;
-  }, [selectedMenu, selectedVideos]);
   return (
     <Container>
       <Grid container>
@@ -117,7 +126,12 @@ const Top = ({ selectedMenu, onSelectMenu }) => {
       {selectedMenu !== "chart" && (
         <Box>
           <Grid item>
-            <Chart startDate={startDate} endDate={endDate} chdata={chdata} />
+            <Chart
+              startDate={startDate}
+              endDate={endDate}
+              chdata1={chdata1}
+              chdata2={chdata2}
+            />
           </Grid>
         </Box>
       )}

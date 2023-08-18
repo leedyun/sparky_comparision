@@ -3,7 +3,7 @@ import ReactApexChart from "react-apexcharts";
 import { format, eachDayOfInterval } from "date-fns";
 import "./Chart.css";
 
-const Chart = ({ startDate, endDate, chdata }) => {
+const Chart = ({ startDate, endDate, chdata1, chdata2 }) => {
   const [initialData, setInitialData] = useState([
     { date: new Date("2023-06-05"), value: 1 },
     { date: new Date("2023-07-09"), value: 2 },
@@ -12,22 +12,36 @@ const Chart = ({ startDate, endDate, chdata }) => {
   ]);
 
   const [chartDataInitial, setChartDataInitial] = useState(null);
-  const [chartDataChdata, setChartDataChdata] = useState(null);
+  const [chartDataChdata1, setChartDataChdata1] = useState(null);
+  const [chartDataChdata2, setChartDataChdata2] = useState(null);
 
   useEffect(() => {
     const mappedDataInitial = mapDataByDate(initialData, startDate, endDate);
-    const mappedDataChdata = mapDataByDate(chdata, startDate, endDate);
-
     setChartDataInitial({
       series: generateDataArray(mappedDataInitial),
       categories: generateCategories(startDate, endDate),
     });
 
-    setChartDataChdata({
-      series: generateDataArray(mappedDataChdata),
-      categories: generateCategories(startDate, endDate),
-    });
-  }, [startDate, endDate, initialData, chdata]);
+    if (chdata1) {
+      const mappedDataChdata1 = mapDataByDate(chdata1, startDate, endDate);
+      setChartDataChdata1({
+        series: generateDataArray(mappedDataChdata1),
+        categories: generateCategories(startDate, endDate),
+      });
+    } else {
+      setChartDataChdata1(null);
+    }
+
+    if (chdata2) {
+      const mappedDataChdata2 = mapDataByDate(chdata2, startDate, endDate);
+      setChartDataChdata2({
+        series: generateDataArray(mappedDataChdata2),
+        categories: generateCategories(startDate, endDate),
+      });
+    } else {
+      setChartDataChdata2(null);
+    }
+  }, [startDate, endDate, initialData, chdata1, chdata2]);
 
   const mapDataByDate = (dataSeries, startDate, endDate) => {
     return dataSeries.reduce((mappedSeries, item) => {
@@ -50,6 +64,9 @@ const Chart = ({ startDate, endDate, chdata }) => {
   };
 
   const generateCategories = (startDate, endDate) => {
+    if (startDate > endDate) {
+      [startDate, endDate] = [endDate, startDate];
+    }
     const dateRange = eachDayOfInterval({
       start: new Date(startDate),
       end: new Date(endDate),
@@ -57,10 +74,35 @@ const Chart = ({ startDate, endDate, chdata }) => {
     return dateRange.map((date) => format(date, "yyyy.MM.dd"));
   };
 
+  const generateSeries = () => {
+    let seriesArray = [
+      {
+        name: "Initial Data",
+        data: chartDataInitial.series,
+      },
+    ];
+
+    if (chartDataChdata1) {
+      seriesArray.push({
+        name: "Chdata 1",
+        data: chartDataChdata1.series,
+      });
+    }
+
+    if (chartDataChdata2) {
+      seriesArray.push({
+        name: "Chdata 2",
+        data: chartDataChdata2.series,
+      });
+    }
+
+    return seriesArray;
+  };
+
   return (
     <div className="ChartContainer">
       <div className="Chart">
-        {chartDataInitial && chartDataChdata && (
+        {chartDataInitial && (
           <ReactApexChart
             options={{
               chart: {
@@ -77,7 +119,7 @@ const Chart = ({ startDate, endDate, chdata }) => {
                 type: "solid",
               },
               legend: {
-                show: true,
+                show: false,
               },
               dataLabels: {
                 enabled: false,
@@ -141,20 +183,7 @@ const Chart = ({ startDate, endDate, chdata }) => {
                 },
               },
             }}
-            series={[
-              {
-                name: "Initial Data",
-                data: chartDataInitial.series,
-              },
-              {
-                name: "Chdata",
-                data: chartDataChdata.series,
-              },
-              {
-                name: "Combined Data",
-                data: generateDataArray(chartDataChdata),
-              },
-            ]}
+            series={generateSeries()}
             type="line"
             height={215}
           />

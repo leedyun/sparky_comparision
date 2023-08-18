@@ -61,7 +61,10 @@ const Calendar0 = ({ onDateRangeChange, isInitialLoad }) => {
   };
 
   const onChange = (dates) => {
-    const [start, end] = dates;
+    let [start, end] = dates;
+    if (start && end && start > end) {
+      [start, end] = [end, start];
+    }
 
     setStartDate(start);
     setEndDate(end);
